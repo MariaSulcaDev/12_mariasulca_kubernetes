@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
      name: 12-maria-sulca-front-deployment
+     namespace: mariasulca
      labels:
           app: 12-maria-sulca-front
 spec:
@@ -20,11 +21,11 @@ spec:
                       imagePullPolicy: Always
                       ports:
                            - containerPort: 80
-                      env:
-                           - name: VITE_API_USERS_URL
-                             value: "http://maria-sulca-users-service:9083"
-                           - name: VITE_API_BASE_URL
-                             value: "http://maria-sulca-users-service:9083/api/v1"
+                      envFrom:
+                           - configMapRef:
+                                  name: 12-maria-sulca-config
+                           - secretRef:
+                                  name: 12-maria-sulca-secret
                       livenessProbe:
                            httpGet:
                                 path: /
